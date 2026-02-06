@@ -1,0 +1,51 @@
+name: React CI (pnpm)
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Set up Node.js (v20)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      # 3. Install pnpm using the official action
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8   # Use the pnpm version you need
+
+      # 4. Install dependencies (using pnpm lockfile)
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # 5. Run tests
+      - name: Run tests
+        run: pnpm test
+
+      # 6. Build the project
+      - name: Build
+        run: pnpm build
+
+      # 7. (Optional) Upload build artifacts
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-build
+          path: .next
+
