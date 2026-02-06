@@ -24,11 +24,13 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      # 3. Install pnpm
+      # 3. Install pnpm via GitHub Action
       - name: Install pnpm
-        run: npm install -g pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8   # or your preferred pnpm version
 
-      # 4. Install dependencies with frozen lockfile
+      # 4. Install dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
@@ -37,7 +39,7 @@ jobs:
         run: pnpm test
 
       # 6. Build the project
-      - name: Build the project
+      - name: Build
         run: pnpm build
 
       # 7. Upload build artifacts
